@@ -14,11 +14,7 @@ import java.io.IOException;
 @EnableConfigurationProperties
 @EnableScheduling
 public class MywebApplication {
-
-
     public static void main(String[] args) throws IOException, InterruptedException {
         SpringApplication.run(MywebApplication.class, args);
     }
-
-
 }

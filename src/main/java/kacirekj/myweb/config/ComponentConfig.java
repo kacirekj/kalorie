@@ -11,6 +11,8 @@ public class ComponentConfig {
 
     @Bean
     public ApplicationInit applicationInit() throws IOException, InterruptedException {
-        return new ApplicationInit();
+        ApplicationInit applicationInit = new ApplicationInit();
+        applicationInit.init();
+        return applicationInit;
     }
 }

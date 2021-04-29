@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="general-status">
+    <table>
+        <tr>
+            <th>Description</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Application id:</td>
+            <td th:text="${applicationId}"></td>
+        </tr>
+        <tr>
+            <td>Application startup time:</td>
+            <td th:text="${applicationStartupTime}"></td>
+        </tr>
+        <tr>
+            <td>Application version:</td>
+            <td th:text="${applicationVersion}"></td>
+        </tr>
+        <tr>
+            <td>Active Spring profiles:</td>
+            <td th:text="${activeProfile}"></td>
+        </tr>
+        <tr>
+            <td>Pg connection works:</td>
+            <td th:text="${isNotificationConnectionEstablished}"></td>
+        </tr>
+        <tr>
+            <td>Max memory:</td>
+            <td th:text="${maxMemory}"></td>
+        </tr>
+        <tr>
+            <td>Allocated memory:</td>
+            <td th:text="${allocatedMemory}"></td>
+        </tr>
+        <tr>
+            <td>Free memory:</td>
+            <td th:text="${freeMemory}"></td>
+        </tr>
+    </table>
+</div>
+
+<div th:fragment="processing-status">
+    <table>
+        <tr>
+            <th>Description</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Processing paused:</td>
+            <td th:text="${isProcessingPaused}"></td>
+        </tr>
+        <tr>
+            <td>Total processed events amount:</td>
+            <td th:text="${processedEventsAmount}"></td>
+        </tr>
+        <tr>
+            <td>Total definitively failed events amount:</td>
+            <td th:text="${failedDevinitiveEventsAmount}"></td>
+        </tr>
+    </table>
+</div>
+
+<div th:fragment="prepopulation-status">
+    <table>
+        <tr>
+            <th>Prepopulation type</th>
+            <th>Is in progresss</th>
+            <th>Start datetime</th>
+            <th>Progress bar</th>
+            <th>Total row count</th>
+        </tr>
+
+        <th:block th:each="s : ${prepopulationStatuses}">
+            <tr>
+                <td th:text="${s.prepopulationType}"></td>
+                <td th:text="${s.isInProgress()}"></td>
+                <td th:text="${s.startDateTime}"></td>
+                <td th:text="${s.progressBar}"></td>
+                <td th:text="${s.totalRowCount}"></td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+
+
+<div th:fragment="events-table">
+    <table>
+        <tr>
+            <th>Created</th>
+            <th>Notification id</th>
+            <th>Key</th>
+            <th>Fails</th>
+            <th>Error message</th>
+        </tr>
+
+        <tr>
+            <td colspan="3">Processing events:</td>
+        </tr>
+        <div th:replace=":: events-table-row (events=${processingEvents})"></div>
+
+        <tr>
+            <td colspan="3">Processed events:</td>
+        </tr>
+        <div th:replace=":: events-table-row (events=${processedEvents})"></div>
+
+        <tr>
+            <td colspan="3">Failed events:</td>
+        </tr>
+        <div th:replace=":: events-table-row (events=${failedEvents})"></div>
+
+        <tr>
+            <td colspan="3">Failed devinitively events:</td>
+        </tr>
+        <div th:replace=":: events-table-row (events=${failedDefinitivelyEvents})"></div>
+
+    </table>
+</div>
+
+<div th:fragment="events-table-row (events)">
+    <th:block th:each="e : ${events}">
+        <tr>
+            <td th:text="${e.lastChange}"></td>
+            <td th:text="${e.notificationId}"></td>
+            <td th:text="${e.key}"></td>
+            <td th:text="${e.failCount}"></td>
+            <td th:text="${e.errorMessage}"></td>
+        </tr>
+    </th:block>
+    <th:block th:if="${ #lists.isEmpty(events)}">
+        <tr colspan="3">
+            <td><i>&ltempty&gt</i></td>
+        </tr>
+    </th:block>
+</div>
+
+</body>
+</html>

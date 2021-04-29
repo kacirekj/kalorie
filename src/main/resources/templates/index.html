@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Myweb</title>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+</head>
+
+<style>
+</style>
+
+<body>
+<header>
+    <h1>Myweb</h1>
+    <aside>My web app.</aside>
+</header>
+
+Hello!
+
+<th:block th:each="s : ${books}">
+    <td th:text="${s.id}"></td>
+</th:block>
+
+</body>
+
+<script>
+</script>
+</html>
