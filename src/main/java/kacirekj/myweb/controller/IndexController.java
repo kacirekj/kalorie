@@ -1,33 +1,49 @@
 package kacirekj.myweb.controller;
 
-import kacirekj.myweb.dao.BooksRepository;
+import kacirekj.myweb.dao.BooksDao;
 import kacirekj.myweb.domain.Author;
 import kacirekj.myweb.domain.Book;
+import kacirekj.myweb.domain.Dealer;
+import kacirekj.myweb.repository.BookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Controller
-public class WebConsoleController {
+public class IndexController {
 
-    private BooksRepository booksRepository;
+    private BookRepository bookRepository;
 
-    public WebConsoleController(BooksRepository booksRepository) {
-        this.booksRepository = booksRepository;
+    public IndexController(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @GetMapping("/")
     public String index(Model model) {
-        List<Book> books = StreamSupport.stream(booksRepository.findAll().spliterator(), false)
+        List<Book> books = StreamSupport.stream(bookRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
         model.addAttribute("books", books);
-        booksRepository.save(new Book("Kniha", new Author()));
+        Set<Author> authors = new HashSet<>();
+        authors.add(new Author());
+        authors.add(new Author());
+        authors.add(new Author());
+
+
+        Set<Dealer> dealers = new HashSet<>();
+        dealers.add(new Dealer());
+        dealers.add(new Dealer());
+        dealers.add(new Dealer());
+
+
+        bookRepository.save(new Book("Kniha", authors, dealers, new Author()));
         return "index";
     }
 

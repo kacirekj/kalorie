@@ -1,7 +1,8 @@
 package kacirekj.myweb.config;
 
-import kacirekj.myweb.controller.WebConsoleController;
-import kacirekj.myweb.dao.BooksRepository;
+import kacirekj.myweb.controller.IndexController;
+import kacirekj.myweb.dao.BooksDao;
+import kacirekj.myweb.repository.BookRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class ControllerConfig {
     
     @Bean
-    public WebConsoleController webConsoleController(BooksRepository booksRepository) {
-        return new WebConsoleController(booksRepository);
+    public IndexController webConsoleController(BookRepository bookRepository) {
+        return new IndexController(bookRepository);
     }
 }

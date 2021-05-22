@@ -1,11 +1,17 @@
 package kacirekj.myweb.domain;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.util.Set;
 
 @Entity
 public class Book {
@@ -14,16 +20,27 @@ public class Book {
     private Integer id;
     private String name;
 
-    @OneToOne(cascade = {CascadeType.ALL})
-    private Author author;
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+//    @Fetch(FetchMode.JOIN)
+    private Author mainAuthor;
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+//    @Fetch(FetchMode.JOIN)
+    private Set<Author> authors;
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+//    @Fetch(FetchMode.JOIN)
+    private Set<Dealer> dealers;
 
     public Book() {
 
     }
 
-    public Book(String name, Author author) {
+    public Book(String name, Set<Author> authors, Set<Dealer> dealers, Author mainAuthor) {
         this.name = name;
-        this.author = author;
+        this.authors = authors;
+        this.dealers = dealers;
+        this.mainAuthor = mainAuthor;
     }
 
     public Integer getId() {
@@ -42,11 +59,27 @@ public class Book {
         this.name = name;
     }
 
-    public Author getAuthor() {
-        return author;
+    public Author getMainAuthor() {
+        return mainAuthor;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setMainAuthor(Author mainAuthor) {
+        this.mainAuthor = mainAuthor;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public Set<Dealer> getDealers() {
+        return dealers;
+    }
+
+    public void setDealers(Set<Dealer> dealers) {
+        this.dealers = dealers;
     }
 }

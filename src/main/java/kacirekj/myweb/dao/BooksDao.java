@@ -8,9 +8,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Repository
-public class BooksRepository {
+public class BooksDao {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -22,6 +23,7 @@ public class BooksRepository {
 
     @Transactional
     public List<Book> findAll() {
-        return entityManager.createQuery("from Book", Book.class).getResultList();
+        return entityManager.createQuery(
+                "from Book", Book.class).getResultList();
     }
 }
