@@ -1,55 +1,45 @@
 package kacirekj.myweb.controller;
 
-import kacirekj.myweb.dao.BooksDao;
-import kacirekj.myweb.domain.Author;
-import kacirekj.myweb.domain.Book;
-import kacirekj.myweb.domain.Dealer;
-import kacirekj.myweb.repository.BookRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import kacirekj.myweb.domain.Marker;
+import kacirekj.myweb.repository.MarkerRepository;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import javax.websocket.server.PathParam;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-@Controller
+@RestController
 public class IndexController {
 
-    private BookRepository bookRepository;
+    private MarkerRepository markerRepository;
 
-    public IndexController(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public IndexController(MarkerRepository markerRepository) {
+        this.markerRepository = markerRepository;
     }
 
-    @GetMapping("/")
-    public String index(Model model) {
-        List<Book> books = StreamSupport.stream(bookRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-        model.addAttribute("books", books);
-        Set<Author> authors = new HashSet<>();
-        authors.add(new Author());
-        authors.add(new Author());
-        authors.add(new Author());
-
-
-        Set<Dealer> dealers = new HashSet<>();
-        dealers.add(new Dealer());
-        dealers.add(new Dealer());
-        dealers.add(new Dealer());
-
-
-        bookRepository.save(new Book("Kniha", authors, dealers, new Author()));
-        return "index";
+    @GetMapping("/marker/all")
+    public List<Marker> getAllMarkers() {
+        List<Marker> markers = markerRepository.findAll();
+        return markers;
     }
 
-    @GetMapping("/status-event-table")
-    public String eventTable(@RequestParam(value = "limit", required = false) Integer limit) {
-//      model.addAllAttributes(getModel(limit));
-        return "fragments/status :: events-table";
+    @PostMapping("/marker")
+    public void postMarker(@RequestBody Marker marker) {
+        markerRepository.save(marker);
+    }
+
+    @PutMapping("/marker/{id}")
+    public void put(
+            @PathParam("id") Integer id,
+            @RequestBody Marker marker
+    ) {
+        Marker storedMarker = markerRepository.findById(id);
+        storedMarker.setY(marker.getY());
+        storedMarker.setX(marker.getX());
+        storedMarker.setNote(marker.getNote());
+        markerRepository.save(storedMarker);
     }
 }
