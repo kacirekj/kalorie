@@ -1,12 +1,23 @@
 <head>
+    <!-- Vue -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
+
+    <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Maps -->
     <link rel="stylesheet" href="vue-googlemaps.css">
+    <script src="vue-google-maps.js"></script>
+
+    <!-- Components -->
+    <script src="https://unpkg.com/vue-star-rating/dist/VueStarRating.umd.min.js"></script>`
+
+
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script src="vue-google-maps.js"></script>
 </head>
 
 <body>
@@ -29,6 +40,8 @@
                     <input id="selectedMarkerId" type="number" v-model.number="selectedMarker.id" type="number" disabled/>
                 </div>
                 <div class="form-group">
+                    <star-rating :star-size=30 v-model="rating"></star-rating>
+
                     <label for="selectedMarkerNote">Komentar</label>
                     <input id="selectedMarkerNote" type="text" v-model="selectedMarker.note" type="text" enabled/>
                 </div>
@@ -64,11 +77,9 @@
         },
     })
 
-    // VueGoogleMap.load({
-    //     'key': 'AIzaSyCca3BtctZGXkMlZSk8hNXXw_j_EMYLDBI',
-    // })
-    // Vue.component('google-map', VueGoogleMap.Map);
-    // Vue.component('google-map-marker', VueGoogleMap.Marker);
+    Vue.component('star-rating', VueStarRating.default);
+
+
     let vue = new Vue({
         el: '#app',
         data: {
@@ -79,6 +90,7 @@
             zoom: 8,
             markers: [],
             selectedMarker: null,
+            rating: 4
         },
         methods: {
             createMarker: function (lat, lng, note) {
