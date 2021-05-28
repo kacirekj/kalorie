@@ -23,12 +23,18 @@
             </gmap-map>
         </div>
         <div class="col">
-            <div v-if="selectedMarker != null">
-                <input type="text" v-model.number="selectedMarker.id" type="number"/>
-                <input type="text" v-model.number="selectedMarker.lat" type="number"/>
-                <input type="text" v-model.number="selectedMarker.lng" type="number"/>
-                <input type="text" v-model="selectedMarker.note"/>
-            </div>
+            <form v-if="selectedMarker != null">
+                <div class="form-group">
+                    <label for="selectedMarkerId">Id</label>
+                    <input id="selectedMarkerId" type="number" v-model.number="selectedMarker.id" type="number" disabled/>
+                </div>
+                <div class="form-group">
+                    <label for="selectedMarkerNote">Komentar</label>
+                    <input id="selectedMarkerNote" type="text" v-model="selectedMarker.note" type="text" enabled/>
+                </div>
+                <button>Upravit</button>
+                <button>Smazat</button>
+            </form>
         </div>
     </div>
 </div>
