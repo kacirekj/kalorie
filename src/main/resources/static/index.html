@@ -3,18 +3,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="vue-googlemaps.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script src="vue-google-maps.js"></script>
 </head>
+
 <body>
 
-<div id="app">
-    <gmap-map style="width: 80%; height: 100%; position: absolute; left:0; top:0" :center="center" :zoom="zoom"
-              @rightclick="onMapRightClick">
-        <gmap-marker v-for="marker in markers" v-bind:key="marker.id" :position="{lat: marker.lat, lng: marker.lng}"
-                     @click="onMarkerClick(marker)"></gmap-marker>
-    </gmap-map>
+<div id="app" class="container-fluid">
+    <div class="row">
+        <div class="col-9">
+            <gmap-map style="height: 100vh;" :center="center" :zoom="zoom"
+                      @rightclick="onMapRightClick">
+                <gmap-marker v-for="marker in markers" v-bind:key="marker.id"
+                             :position="{lat: marker.lat, lng: marker.lng}"
+                             @click="onMarkerClick(marker)"
+                             @rightclick="onMarkerRightClick(marker)"></gmap-marker>
+            </gmap-map>
+        </div>
+        <div class="col">
+            <div v-if="selectedMarker != null">
+                <input type="text" v-model.number="selectedMarker.id" type="number"/>
+                <input type="text" v-model.number="selectedMarker.lat" type="number"/>
+                <input type="text" v-model.number="selectedMarker.lng" type="number"/>
+                <input type="text" v-model="selectedMarker.note"/>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
 
 <script>
 
@@ -34,16 +63,16 @@
     // })
     // Vue.component('google-map', VueGoogleMap.Map);
     // Vue.component('google-map-marker', VueGoogleMap.Marker);
-    new Vue({
+    let vue = new Vue({
         el: '#app',
         data: {
             center: {
-                lat: 1.38,
-                lng: 103.8
+                lat: 49.855266890094775,
+                lng: 15.389647220205806
             },
-            zoom: 12,
-            markers: [
-            ]
+            zoom: 8,
+            markers: [],
+            selectedMarker: null,
         },
         methods: {
             createMarker: function (lat, lng, note) {
@@ -56,17 +85,20 @@
                 axios.post('marker', newMarker);
             },
             onMarkerClick: function (input) {
+                this.selectedMarker = input;
+            },
+            onMarkerRightClick: function (input) {
                 this.markers.splice(this.markers.indexOf(input), 1)
                 axios.delete('marker/' + input.id);
             },
         },
         mounted() {
             console.log("Mounted!");
-                axios.get('marker/all')
-                    .then((response) => {
-                        console.log(response.data)
-                        this.markers.push(...response.data)
-                    });
+            axios.get('marker/all')
+                .then((response) => {
+                    console.log(response.data)
+                    this.markers.push(...response.data)
+                });
 
         },
         // mounted: function () {
@@ -77,4 +109,4 @@
 
 </script>
 
-</body>
+

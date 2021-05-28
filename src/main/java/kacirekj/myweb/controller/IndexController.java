@@ -13,6 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.websocket.server.PathParam;
 import java.util.List;
 
+/**
+ * Co to ma delat:
+ * Uzivatel prijde, ze chce recenzovat. Tak si otevre mapu, zada nazev ulice NEBO si priblizovani najde potrebne misto. Udela pravym tlacitkem mysi klik a vybere pridat novou recenzi mista.
+ * Potom vyplni Komentar k misto, da pocet hvezdicek od 0 do 5 jako hodnoceni. Vyplni sve telefonni cislo a odesle formular. Na mobil mu prijde kod, ktery vepise do formulare a potvrdi ho. Tim se
+ * recenze vlozi.
+ *
+ * Uzivatel prijde ze chce editovat nebo smazat recenzi. Vlozi sve tel. cislo, prijde mu kod kterym pak muze editovat recenzi, je-li sbindovana s danym el cislem. Pak ji muze mazat a editovat.
+ *
+ *
+ */
 @RestController
 public class IndexController {
 
