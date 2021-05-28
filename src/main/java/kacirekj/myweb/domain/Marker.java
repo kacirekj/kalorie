@@ -10,34 +10,42 @@ import java.math.BigDecimal;
 @Entity
 public class Marker {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
+    private String id;
 
-    @Column(scale = 18, precision = 25)
-    private BigDecimal x;
+    @Column(scale = 5, precision = 10)
+    private BigDecimal lat;
 
-    @Column(scale = 18, precision = 25)
-    private BigDecimal y;
+    @Column(scale = 3, precision = 10)
+    private BigDecimal lng;
     private String note;
 
     public Marker() {
 
     }
 
-    public BigDecimal getX() {
-        return x;
+    public String getId() {
+        return id;
     }
 
-    public void setX(BigDecimal longitude) {
-        this.x = longitude;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public BigDecimal getY() {
-        return y;
+
+    public BigDecimal getLat() {
+        return lat;
     }
 
-    public void setY(BigDecimal latitude) {
-        this.y = latitude;
+    public void setLat(BigDecimal longitude) {
+        this.lat = longitude;
+    }
+
+    public BigDecimal getLng() {
+        return lng;
+    }
+
+    public void setLng(BigDecimal latitude) {
+        this.lng = latitude;
     }
 
     public String getNote() {
