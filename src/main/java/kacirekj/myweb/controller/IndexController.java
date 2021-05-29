@@ -48,15 +48,10 @@ public class IndexController {
         markerRepository.deleteById(id);
     }
 
-    @PutMapping("marker/{id}")
+    @PutMapping("marker")
     public void put(
-            @PathParam("id") String id,
             @RequestBody Marker marker
     ) {
-        Marker storedMarker = markerRepository.findById(id);
-        storedMarker.setLng(marker.getLng());
-        storedMarker.setLat(marker.getLat());
-        storedMarker.setNote(marker.getNote());
-        markerRepository.save(storedMarker);
+        markerRepository.save(marker);
     }
 }

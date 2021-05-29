@@ -12,16 +12,16 @@ public class Marker {
     @Id
     private String id;
 
-    @Column(scale = 5, precision = 10)
+    @Column(scale = 5, precision = 10, nullable = false)
     private BigDecimal lat;
 
-    @Column(scale = 5, precision = 10)
+    @Column(scale = 5, precision = 10, nullable = false)
     private BigDecimal lng;
 
     private String note;
 
     @Column(scale = 2, precision = 10)
-    private BigDecimal valuation;
+    private BigDecimal rating;
 
     @ManyToOne(targetEntity = Person.class, fetch = FetchType.EAGER)
     private Person author;
@@ -38,12 +38,12 @@ public class Marker {
         this.id = id;
     }
 
-    public BigDecimal getValuation() {
-        return valuation;
+    public BigDecimal getRating() {
+        return rating;
     }
 
-    public void setValuation(BigDecimal valuation) {
-        this.valuation = valuation;
+    public void setRating(BigDecimal valuation) {
+        this.rating = valuation;
     }
 
     public BigDecimal getLat() {
