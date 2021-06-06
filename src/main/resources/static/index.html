@@ -22,24 +22,35 @@
 
 </head>
 
+<style>
+    .gm-style-iw {
+        max-width: 400px;
+        min-height: 150px;
+    }
+</style>
+
 <body>
 
 <div id="app" class="container-fluid px-0 ">
     <div class="row no-gutters">
-        <div class="col">
+        <div class="col-9">
             <gmap-map style="height: 100vh;" :center="center" :zoom="zoom" @click="onMapClick" @rightclick="onMapRightClick">
-                <gmap-info-window v-if="selectedMapPosition != null" :position="selectedMapPosition">
-                    <new-marker-form :marker="newMarker" @add="onMarkerAddClick"></new-marker-form>
-                </gmap-info-window>
-                <gmap-marker v-for="marker in markers" v-bind:key="marker.id" :position="{lat: marker.lat, lng: marker.lng}" :draggable="true" :opacity="0.7" @click="onMarkerClick(marker)" @rightclick="onMarkerRightClick(marker)"
+                <!--                <gmap-info-window v-if="selectedMapPosition != null" :position="selectedMapPosition">-->
+                <!--                    <new-marker-form :marker="newMarker" @add="onMarkerAddClick"></new-marker-form>-->
+                <!--                </gmap-info-window>-->
+                <gmap-marker v-for="marker in markers" v-bind:key="marker.id" :position="{lat: marker.lat, lng: marker.lng}" :draggable="marker.isSelected" :opacity="1" @click="onMarkerClick(marker, $event)" @rightclick="onMarkerRightClick(marker, $event)"
                              @dragend="onMarkerDragEnd">
-                    <gmap-info-window v-if="selectedMarker == marker">
-                        <existing-marker-form :marker="selectedMarker" @edit="onMarkerEditClick(selectedMarker)" @remove="onMarkerRemoveClick(selectedMarker)"></existing-marker-form>
-                    </gmap-info-window>
+                    <!--                    <gmap-info-window v-if="selectedMarker == marker">-->
+                    <!--                        <existing-marker-form :marker="selectedMarker" @edit="onMarkerEditClick(selectedMarker)" @remove="onMarkerRemoveClick(selectedMarker)"></existing-marker-form>-->
+                    <!--                    </gmap-info-window>-->
                 </gmap-marker>
+                <gmap-marker v-if="newMarker != null" v-bind:key="newMarker.id" :position="{lat: newMarker.lat, lng: newMarker.lng}" :draggable="false" :opacity="0.4    " @click="onMarkerClick(newMarker, $event)" @rightclick="onMarkerRightClick(newMarker, $event)"
+                             @dragend="onMarkerDragEnd">
+
             </gmap-map>
         </div>
-        <div class="col-auto">
+        <div class="col">
+            <existing-marker-form v-if="selectedMarker != null" :marker="selectedMarker" @add="onMarkerAddClick" @edit="onMarkerEditClick(selectedMarker)" @remove="onMarkerRemoveClick(selectedMarker)"></existing-marker-form>
         </div>
     </div>
 </div>
@@ -47,7 +58,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
 
 </body>
 
@@ -77,14 +87,7 @@
             zoom: 8,
             markers: [],
             selectedMarker: null,
-            selectedMapPosition: null,
-            newMarker: {
-                id: Date.now(),
-                lat: 49.855,
-                lng: 15.389,
-                rating: 3,
-                note: null
-            },
+            newMarker: null,
             rating: 4,
             shape: {coords: [25, 25, 25], type: 'circle'},
         },
@@ -97,23 +100,40 @@
             onMapClick: function (input) {
                 console.log('onMapClick', input);
                 this.selectedMarker = null
-                this.selectedMapPosition = null
-                console.log(this.selectedMapPosition)
             },
             onMapRightClick: function (input) {
                 console.log('onMapRightClick', input);
-                this.selectedMapPosition = {lat: input.latLng.lat(), lng: input.latLng.lng()}
-                this.newMarker = {...this.newMarker, ...this.selectedMapPosition}
+                if (this.newMarker == null) {
+                    this.newMarker = {
+                        lat: 49.855,
+                        lng: 15.389,
+                        rating: 3,
+                        note: null,
+                        author: {
+                            phoneNumber: 123
+                        }
+                    }
+                }
+
+                this.newMarker.lat = input.latLng.lat();
+                this.newMarker.lng = input.latLng.lng();
+                this.selectedMarker = this.newMarker;
             },
-            onMarkerClick: function (input) {
-                console.log('onMarkerClick', input);
-                this.selectedMarker = input;
+            onMarkerClick: function (marker, event) {
+                console.log('onMarkerClick', marker);
+                if(this.selectedMarker != null) {
+                    this.selectedMarker.isSelected = false;
+                }
+                this.selectedMarker = marker;
+                this.selectedMarker.isSelected = true;
             },
             onMarkerRightClick: function (input) {
                 console.log('onMarkerRightClick', input)
             },
             onMarkerDragEnd: function (input) {
                 console.log('onMarkerDragEnd', input)
+                this.selectedMarker.lat = input.latLng.lat();
+                this.selectedMarker.lng = input.latLng.lng();
             },
             onRatingSelected: function (input) {
                 console.log('onRatingSelected', input)
@@ -132,10 +152,10 @@
                 console.log('onMarkerAddClick', input)
                 let newMarker = {...this.newMarker, id: Date.now()};
                 this.markers.push(newMarker);
+                this.newMarker = null;
                 axios.post('marker', newMarker);
 
                 this.selectedMarker = newMarker;
-                this.selectedMapPosition = null;
             },
             onMarkerEditClick(input) {
                 console.log('onMarkerEditClick', input)
@@ -143,7 +163,6 @@
                 axios.put('marker', editedMarker);
 
                 this.selectedMarker = editedMarker;
-                this.selectedMapPosition = null;
             }
         },
         mounted() {

@@ -1,5 +1,6 @@
 package kacirekj.myweb.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +24,7 @@ public class Marker {
     @Column(scale = 2, precision = 10)
     private BigDecimal rating;
 
-    @ManyToOne(targetEntity = Person.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Person.class, optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Person author;
 
     public Marker() {
