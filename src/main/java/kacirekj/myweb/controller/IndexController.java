@@ -1,7 +1,7 @@
 package kacirekj.myweb.controller;
 
-import kacirekj.myweb.domain.Marker;
-import kacirekj.myweb.repository.MarkerRepository;
+import kacirekj.myweb.domain.Food;
+import kacirekj.myweb.repository.FoodRepository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 /**
@@ -26,32 +25,38 @@ import java.util.List;
 @RestController
 public class IndexController {
 
-    private MarkerRepository markerRepository;
+    private FoodRepository foodRepository;
 
-    public IndexController(MarkerRepository markerRepository) {
-        this.markerRepository = markerRepository;
+    public IndexController(FoodRepository foodRepository) {
+        this.foodRepository = foodRepository;
     }
 
-    @GetMapping("marker/all")
-    public List<Marker> getAllMarkers() {
-        List<Marker> markers = markerRepository.findAll();
+    @GetMapping("food/all")
+    public List<Food> getAllMarkers() {
+        List<Food> markers = foodRepository.findAll();
         return markers;
     }
 
-    @PostMapping("marker")
-    public void postMarker(@RequestBody Marker marker) {
-        markerRepository.save(marker);
+    @GetMapping("food/{id}")
+    public Food getMarker(@PathVariable String id) {
+        Food markers = foodRepository.findById(id);
+        return markers;
+    }
+
+    @PostMapping("food")
+    public void postMarker(@RequestBody Food marker) {
+        foodRepository.save(marker);
     }
 
     @DeleteMapping("marker/{id}")
-    public void deleteMarker(@PathVariable("id") String id) {
-        markerRepository.deleteById(id);
+    public void deleteMarker(@PathVariable String id) {
+        foodRepository.deleteById(id);
     }
 
     @PutMapping("marker")
     public void put(
-            @RequestBody Marker marker
+            @RequestBody Food marker
     ) {
-        markerRepository.save(marker);
+        foodRepository.save(marker);
     }
 }

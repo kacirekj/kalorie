@@ -1,13 +1,13 @@
 package kacirekj.myweb.config;
 
-import kacirekj.myweb.repository.MarkerRepository;
+import kacirekj.myweb.repository.FoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EnableJpaRepositories(basePackageClasses = MarkerRepository.class)
+@EnableJpaRepositories(basePackageClasses = FoodRepository.class)
 public class RepositoryConfig {
 
     @Autowired

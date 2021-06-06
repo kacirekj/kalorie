@@ -25,9 +25,17 @@ public class DatasourceConfig {
         hikariConfig.setUsername(env.getProperty("datasource.user"));
         hikariConfig.setPassword(env.getProperty("datasource.password"));
         hikariConfig.setMaximumPoolSize(5);
-        hikariConfig.setInitializationFailTimeout(10);
+        hikariConfig.setInitializationFailTimeout(20);
 
-        HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
+        HikariDataSource hikariDataSource = null;
+        while(hikariDataSource == null) {
+            try {
+                hikariDataSource = new HikariDataSource(hikariConfig);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                Thread.sleep(1000);
+            }
+        }
 
         return hikariDataSource;
     }

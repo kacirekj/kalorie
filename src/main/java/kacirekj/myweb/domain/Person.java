@@ -1,37 +1,22 @@
 package kacirekj.myweb.domain;
 
+import lombok.*;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Person {
     @Id
-    @Column(unique = true, nullable = false)
-    private Long phoneNumber;
+    @GeneratedValue
+    private Long id;
 
-//    @OneToMany(targetEntity = Marker.class, mappedBy = "marker")
-//    private Set<Marker> markers;
+    private String email;
 
-    public Person() {
-
-    }
-
-//    public Set<Marker> getMarkers() {
-//        return markers;
-//    }
-//
-//    public void setMarkers(Set<Marker> markers) {
-//        this.markers = markers;
-//    }
-
-
-    public Long getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Long phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+    private String sex;
 }
