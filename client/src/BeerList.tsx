@@ -1,57 +1,55 @@
 import * as React from 'react';
-import GiphyImage from './GiphyImage';
+import SearchEdit from './SearchEdit'
 
 interface Beer {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number
 }
 
 interface BeerListProps {
 }
 
 interface BeerListState {
-  beers: Array<Beer>;
-  isLoading: boolean;
+    beers: Array<Beer>;
+    searchValue: string;
 }
 
 class BeerList extends React.Component<BeerListProps, BeerListState> {
 
-  constructor(props: BeerListProps) {
-    super(props);
+    constructor(props: BeerListProps) {
+        super(props);
 
-    this.state = {
-      beers: [],
-      isLoading: false
-    };
-  }
+        this.state = {
+            beers: [],
+            searchValue: '',
+        };
 
-  componentDidMount() {
-    this.setState({isLoading: true});
-
-    fetch('http://localhost:8080/food/all')
-      .then(response => response.json())
-      .then(data => this.setState({beers: data, isLoading: false}));
-  }
-
-  render() {
-    const {beers, isLoading} = this.state;
-
-    if (isLoading) {
-      return <p>Loading...</p>;
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    return (
-      <div>
-        <h2>Beer List</h2>
-        {beers.map((beer: Beer) =>
-          <div key={beer.id}>
-            {beer.name}<br/>
-            <GiphyImage name={beer.name}/>
-          </div>
-        )}
-      </div>
-    );
-  }
+    handleChange(text: string) {
+        fetch('http://localhost:8080/food?id=' + text)
+            .then(response => response.json())
+            .then(data => this.setState({beers: data, searchValue: text}));
+    }
+
+    render() {
+        return (
+            <div>
+
+                <h2>Jidelnicek</h2>
+                <label>Nazev potraviny:</label>
+                <SearchEdit value={this.state.searchValue} onSelected={(row) => this.setState({searchValue: row.name})} onChange={this.handleChange} header={{'name':'Potravina', 'calories': 'Energeticka hodnota [kcal]'}} content={this.state.beers} />
+                A tady je nejaky dalsi text <br/>
+                A tady je nejaky dalsi text <br/>
+            </div>
+        );
+    }
+
 }
 
 export default BeerList;

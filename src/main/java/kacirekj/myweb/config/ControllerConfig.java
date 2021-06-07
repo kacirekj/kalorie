@@ -2,6 +2,7 @@ package kacirekj.myweb.config;
 
 import kacirekj.myweb.controller.IndexController;
 import kacirekj.myweb.repository.FoodRepository;
+import kacirekj.myweb.repository.FoodRepositoryCustom;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class ControllerConfig {
     
     @Bean
-    public IndexController webConsoleController(FoodRepository foodRepository) {
-        return new IndexController(foodRepository);
+    public IndexController webConsoleController(FoodRepository foodRepository, FoodRepositoryCustom foodRepositoryCustom) {
+        return new IndexController(foodRepository, foodRepositoryCustom);
     }
 }
