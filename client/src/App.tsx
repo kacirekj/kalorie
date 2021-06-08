@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import BeerList from './BeerList';
+import DayDairy from "./component/DayDairy";
 
 class App extends React.Component<{}, any> {
   render() {
@@ -9,7 +9,7 @@ class App extends React.Component<{}, any> {
         <header>
           <h1>Kaloricke tabulky</h1>
         </header>
-        <BeerList/>
+        <DayDairy/>
       </div>
     );
   }

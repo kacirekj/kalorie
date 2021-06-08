@@ -1,0 +1,5 @@
+enum DaytimeEnum {
+    SNIDANE, DOPOLEDNI_SVACINA, OBED, ODPOLEDNI_SVACINA, VECERE, DRUHA_VECERE
+}
+
+export default DaytimeEnum;
