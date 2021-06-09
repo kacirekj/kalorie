@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SearchEdit from './SearchEdit'
+import SearchBox from './SearchBox'
 import Food from '../domain/Food'
 import FoodConnector from '../connector/FoodConnector'
 import DaytimeEnum from "../domain/DaytimeEnum";
@@ -23,15 +23,16 @@ class DaytimePicker extends React.Component<DaytimePickerProp, DaytimePickerStat
     render() {
         return (
             <div>
-                <select className="form-control select-daytime"
+                <select className="form-control form-control-sm select-daytime"
                         value={this.props.value}
                         onChange={(val) => this.props.onChange(parseInt(val.target.value, 10))}>
-                    <option value="0">Snídaně</option>
-                    <option value="1">Dopolední svačina</option>
-                    <option value="2">Oběd</option>
-                    <option value="3">Odpolední svačina</option>
-                    <option value="4">Večeře</option>
-                    <option value="5">Druhá večeře</option>
+                    <option value="0">Prubezne</option>
+                    <option value="1">Snídaně</option>
+                    <option value="2">Dopolední svačina</option>
+                    <option value="3">Oběd</option>
+                    <option value="4">Odpolední svačina</option>
+                    <option value="5">Večeře</option>
+                    <option value="6">Druhá večeře</option>
                 </select>
 
             </div>

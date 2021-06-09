@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-interface SearchEditProps {
+interface SearchBoxProps {
     value?: string;
     header: any;
     content: any;
@@ -9,7 +9,7 @@ interface SearchEditProps {
     showHeader?: boolean;
 }
 
-interface SearchEditState {
+interface SearchBoxState {
     hasBeenInputFocused: boolean;
     isInputFocused: boolean,
     isMouseInCard: boolean;
@@ -18,9 +18,9 @@ interface SearchEditState {
     isRowSelected?: boolean;
 }
 
-class SearchEdit extends React.Component<SearchEditProps, SearchEditState> {
+class SearchBox extends React.Component<SearchBoxProps, SearchBoxState> {
 
-    constructor(props: SearchEditProps) {
+    constructor(props: SearchBoxProps) {
         super(props);
 
         this.state = {
@@ -116,7 +116,7 @@ class SearchEdit extends React.Component<SearchEditProps, SearchEditState> {
         return (
             <div>
                 <div className="searchbox">
-                    <input className="form-control" type="edit"
+                    <input className="form-control form-control-sm" type="edit"
                            value={this.props.value}
                            onChange={this.onInputChanged}
                            onMouseEnter={this.onMouseEnterInput}
@@ -130,7 +130,7 @@ class SearchEdit extends React.Component<SearchEditProps, SearchEditState> {
                                  onMouseEnter={this.onMouseEnterCard}
                                  onMouseLeave={this.onMouseLeaveCard}
                             >
-                                <table className="table table-sm table-light">
+                                <table className="table-sm table-light">
                                     {this.props.showHeader && (
                                         <thead>
                                         <tr>
@@ -142,7 +142,7 @@ class SearchEdit extends React.Component<SearchEditProps, SearchEditState> {
                                     )}
                                     <tbody>
                                     {this.props.content.map((data: any) =>
-                                        <tr key={data.id}
+                                        <tr key={data.reactKey}
                                             onMouseEnter={(e) => this.onMouseEnterRow(e)}
                                             onMouseLeave={(e) => this.onMouseLeaveRow(e)}
                                             onClick={() => this.onRowMouseClick(data)}
@@ -165,4 +165,4 @@ class SearchEdit extends React.Component<SearchEditProps, SearchEditState> {
 
 }
 
-export default SearchEdit;
+export default SearchBox;

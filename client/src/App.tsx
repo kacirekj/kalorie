@@ -1,15 +1,16 @@
 import * as React from 'react';
 import './App.css';
-import DayDairy from "./component/DayDairy";
+import Menu from "./component/Menu";
 
 class App extends React.Component<{}, any> {
   render() {
     return (
       <div className="App">
-        <header>
-          <h1>Kaloricke tabulky</h1>
-        </header>
-        <DayDairy/>
+        <br/>
+        <br/>
+        <br/>
+
+        <Menu/>
       </div>
     );
   }

@@ -1,5 +1,7 @@
 import DaytimeEnum from "./DaytimeEnum";
 
+let countId = 0;
+
 class Food {
 
     static createDefault = () => {
@@ -11,7 +13,7 @@ class Food {
         f._calories = 0;
         f._fat = 0;
         f._amount = 100;
-        f._daytimeEnum = DaytimeEnum.SNIDANE;
+        f._daytimeEnum = DaytimeEnum.NEUVEDENO;
         return f;
     }
 
@@ -21,8 +23,27 @@ class Food {
         return f;
     }
 
-    private static round = (val: number) => Math.round(val * 10) / 10;
+    static merge(target: Food, source: Food): Food {
+        return Object.assign(new Food(), target, source, {
+            amount: target.amount,
+            daytimeEnum: target.daytimeEnum,
+            reacyKey: target.reactKey
+        });
+    }
 
+    private static round = (val: number) => {
+        if(val < 10) {
+            return Math.round(val * 10) / 10
+        }
+        else if(val < 1000) {
+            return Math.round(val);
+        }
+        else {
+            return Math.round(val / 10) * 10;
+        }
+    };
+
+    private _reactKey: number;
     private _id: string;
     private _name: string;
     private _calories: number;
@@ -32,6 +53,10 @@ class Food {
     private _amount: number;
 
     private _daytimeEnum: DaytimeEnum;
+
+    constructor() {
+        this._reactKey = countId++;
+    }
 
     getCalcProtein () {
         return Food.round(this._amount / 100 * this._protein);
@@ -43,15 +68,17 @@ class Food {
         return Food.round(this._amount / 100 * this._fat);
     };
     getCalcCalories() {
-        return Math.round(this._amount / 100 * this._calories);
+        return Food.round(this._amount / 100 * this._calories);
     };
 
-    merge(food: Food) {
-        const amount = this._amount;
-        const daytimeEnum = this._daytimeEnum;
-        Object.assign(this, food);
-        this.amount = amount;
-        this.daytimeEnum = daytimeEnum;
+
+
+    get reactKey(): number {
+        return this._reactKey;
+    }
+
+    set reactKey(value: number) {
+        this._reactKey = value;
     }
 
     get daytimeEnum(): DaytimeEnum {

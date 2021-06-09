@@ -21,6 +21,9 @@ public class Food {
     @OneToOne(targetEntity = Category.class, optional = true, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Category category;
 
+    private Integer likes;
+    private Integer dislikes;
+
     private Double calories;
 
     private Double protein;
