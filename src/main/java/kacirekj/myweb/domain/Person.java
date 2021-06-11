@@ -13,7 +13,6 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class Person {
     @Id
-    @GeneratedValue
     private Long id;
 
     private String email;

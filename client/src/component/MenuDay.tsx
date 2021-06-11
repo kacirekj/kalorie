@@ -6,15 +6,21 @@ import DatimePicker from "./DatimePicker";
 import DaytimeEnum from "../domain/DaytimeEnum";
 import MenuDayRow from "./MenuDayRow";
 import {Simulate} from "react-dom/test-utils";
-import copy = Simulate.copy;
+
 
 interface DayMenuProp {
+    foods?: Array<Food>;
+    date?: Date;
+    onAddFoodClicked?: (food: Food) => void;
+    onRemoveFoodClicked?: (food: Food) => void;
 }
 
 interface DayMenuState {
-    searchedFoods: Array<Food>;
-    selectedFood?: Food;
-    searchedFoodName: string;
+    searchboxFoods: Array<Food>;
+    searchboxSelectedFood?: Food;
+    searchboxFoodName: string;
+    searchboxFoodDaytime: DaytimeEnum;
+    searchboxFoodAmount: DaytimeEnum;
     isSelectedFoodValid: boolean;
     foods0: Array<Food>;
 }
@@ -26,51 +32,59 @@ class MenuDay extends React.Component<DayMenuProp, DayMenuState> {
     constructor(props: DayMenuProp) {
         super(props);
         this.state = {
-            searchedFoods: [],
-            selectedFood: undefined,
-            searchedFoodName: '',
+            searchboxFoods: [],
+            searchboxSelectedFood: undefined,
+            searchboxFoodName: '',
+            searchboxFoodDaytime: DaytimeEnum.NEUVEDENO,
+            searchboxFoodAmount: 100,
             isSelectedFoodValid: false,
             foods0: [],
         };
     }
 
-    onAddFoodInputChanged = async (text: string) => {
+    onSearchBoxInputChanged = async (text: string) => {
         console.log('onAddFoodInputChanged')
         const foods = await this.foodConnector.getFoodByIdContaining(text);
+        this.state.foods0.filter(f => f.amount === 100).for
         this.setState({
-            searchedFoods: foods,
-            searchedFoodName: text,
+            searchboxFoods: foods,
+            searchboxFoodName: text,
             isSelectedFoodValid: false,
         });
     }
 
-    onAddFoodAmoundChanged = (inputElm: any) => {
-        if(this.state.selectedFood) {
+    onSearchBoxAmoundChanged = (inputElm: any) => {
+        console.log(this.state.searchboxSelectedFood)
+        if (this.state.searchboxSelectedFood) {
             this.setState({
-                selectedFood: Object.assign(this.state.selectedFood, {amount: inputElm.target.value}),
+                searchboxSelectedFood: Object.assign(this.state.searchboxSelectedFood, {amount: inputElm.target.value}),
             });
         }
     }
 
-    onAddFoodDaytimeChanged = (daytimeEnum: DaytimeEnum) => {
+    onSearchBoxDaytimeChanged = (daytimeEnum: DaytimeEnum) => {
         this.setState({
-            selectedFood: Object.assign(this.state.selectedFood, {daytimeEnum}),
+            searchboxFoodDaytime: daytimeEnum
         });
     }
 
-    onAddFoodFoodSelected = (foodSelected: Food) => {
-        console.log('onAddFoodFoodSelected')
+    onSeachBoxFoodSelected = (foodSelected: Food) => {
+        console.log('onAddFoodFoodSelected', foodSelected)
 
-        this.onAddFoodInputChanged(foodSelected.name)
+        this.onSearchBoxInputChanged(foodSelected.name)
         this.setState({
-            selectedFood: foodSelected,
+            searchboxSelectedFood: foodSelected,
         })
     }
 
-    onAddFoodButtonClicked = () => {
-        const copyArray = [...this.state.foods0];
-        copyArray.push(this.state.selectedFood!!);
-        this.setState({selectedFood: undefined, foods0: copyArray});
+    onSearchBoxAddFoodButtonClicked = () => {
+        const food = this.state.searchboxSelectedFood!!;
+        food.daytimeEnum = this.state.searchboxFoodDaytime;
+        this.setState({
+            foods0: [...this.state.foods0, this.state.searchboxSelectedFood!!],
+            searchboxSelectedFood: Food.createSameAs(food),
+            searchboxFoodName: food.name,
+        });
     }
 
     onAddedFoodDaytimeChanged(newDaytimeEnum: DaytimeEnum, food: Food) {
@@ -87,13 +101,9 @@ class MenuDay extends React.Component<DayMenuProp, DayMenuState> {
     }
 
     onAddedFoodChanged(oldFood: Food, newFood: Food) {
-        console.log('d-------------')
-        console.log(newFood)
-        console.log(oldFood)
-        console.log(Food.merge(oldFood, newFood))
         this.setState(
             {
-                foods0: this.state.foods0.map((food) => food === oldFood ? Food.merge(oldFood, newFood) : food)
+                foods0: this.state.foods0.map((food) => food === oldFood ? newFood : food)
             }
         )
     }
@@ -124,38 +134,40 @@ class MenuDay extends React.Component<DayMenuProp, DayMenuState> {
             <React.Fragment>
                 <tr>
                     <td>
-                        <DatimePicker onChange={this.onAddFoodDaytimeChanged}
-                                      value={this.state.selectedFood ? this.state.selectedFood.daytimeEnum : DaytimeEnum.NEUVEDENO}/>
+                        <DatimePicker onChange={this.onSearchBoxDaytimeChanged}
+                                      value={this.state.searchboxFoodDaytime}/>
                     </td>
                     <td>
-                        <SearchBox value={this.state.searchedFoodName}
-                                   onSelected={(food) => this.onAddFoodFoodSelected(food)}
-                                   onChange={this.onAddFoodInputChanged}
+                        <SearchBox value={this.state.searchboxFoodName}
+                                   onSelected={(food) => this.onSeachBoxFoodSelected(food)}
+                                   onChange={this.onSearchBoxInputChanged}
                                    header={{
                                        'name': 'Potravina',
                                    }}
-                                   content={this.state.searchedFoods}/>
+                                   content={this.state.searchboxFoods}/>
 
                     </td>
                     <td><input className="form-control form-control-sm input-amount" type="number"
-                               value={this.state.selectedFood?.amount}
-                               onChange={(event) => this.onAddFoodAmoundChanged(event)}
+                               value={this.state.searchboxSelectedFood?.amount}
+                               onChange={(event) => this.onSearchBoxAmoundChanged(event)}
                     /></td>
-                    <td>{this.state.selectedFood?.getCalcProtein()}</td>
-                    <td>{this.state.selectedFood?.getCalcCarbs()}</td>
-                    <td>{this.state.selectedFood?.getCalcFat()}</td>
-                    <td>{this.state.selectedFood?.getCalcCalories()}</td>
+                    <td>{this.state.searchboxSelectedFood?.getCalcProtein()}</td>
+                    <td>{this.state.searchboxSelectedFood?.getCalcCarbs()}</td>
+                    <td>{this.state.searchboxSelectedFood?.getCalcFat()}</td>
+                    <td>{this.state.searchboxSelectedFood?.getCalcCalories()}</td>
 
 
                     <td>
                         <input type="button" className="btn btn-sm btn-outline-primary button-smybol" value="+"
-                               onClick={this.onAddFoodButtonClicked} disabled={!this.state.selectedFood}/>
+                               onClick={this.onSearchBoxAddFoodButtonClicked}
+                               disabled={!this.state.searchboxSelectedFood}/>
                     </td>
                 </tr>
 
-                {this.state.foods0.filter((food) => food.daytimeEnum === DaytimeEnum.NEUVEDENO).length > 0 &&
+                {this.state.foods0.filter((food) => food.daytimeEnum === DaytimeEnum.NEUVEDENO).length > 0
+                 &&
                 <tr>
-                    <td>V prubehu dne</td>
+                    <td>Prubezne</td>
                 </tr>
                 }
 

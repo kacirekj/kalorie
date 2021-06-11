@@ -36,7 +36,7 @@ public class Food {
     private Double magnesium;
     private Double vitC;
 
-    @ManyToOne(targetEntity = Person.class, optional = true, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(targetEntity = Person.class, optional = true, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Person author;
 
     private void setId(String id) {

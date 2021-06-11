@@ -3,20 +3,23 @@ import MenuDay from "./MenuDay";
 // @ts-ignore
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Food from "../domain/Food";
 
-interface FoodDairyProp {
+interface MenuProp {
 }
 
-interface FoodDairyState {
+interface MenuState {
     show0: boolean;
+    foods: Array<Food>,
 }
 
-class Menu extends React.Component<FoodDairyProp, FoodDairyState> {
+class Menu extends React.Component<MenuProp, MenuState> {
 
-    constructor(props: FoodDairyProp) {
+    constructor(props: MenuProp) {
         super(props);
         this.state = {
             show0: false,
+            foods: [],
         };
     }
 
@@ -51,17 +54,17 @@ class Menu extends React.Component<FoodDairyProp, FoodDairyState> {
                 {/*    </tr>*/}
                 {/*</table>*/}
 
-                <table className="table table-striped">
+                <table className="table-sm table-striped">
                     <thead>
                     <tr className="topheader">
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th  colSpan={3}>Makroziviny [g]</th>
+                        <th colSpan={3}>Makroziviny [g]</th>
 
 
                         <th colSpan={1}>Energie [kcal]</th>
-                        <th ></th>
+                        <th></th>
                     </tr>
                     <tr>
                         <th className="select-daytime">Datum</th>
@@ -100,91 +103,13 @@ class Menu extends React.Component<FoodDairyProp, FoodDairyState> {
                         </td>
                     </tr>
                     {this.state.show0 &&
-                    <MenuDay/>
+                    <MenuDay foods={this.state.foods}
+                             onRemoveFoodClicked={food => this.setState({foods: this.state.foods.filter(f => f.reactKey !== food.reactKey)})}
+                             onAddFoodClicked={(food => this.setState({foods: [...this.state.foods, food]}))}/>
                     }
 
                     <tr className="table-active">
                         <th>06/09/2021</th>
-                        <td>Kureci maso, Mouka bila hladka, Veprova kotleta</td>
-                        <td>66 minut</td>
-                        <td>255</td>
-                        <td>380</td>
-                        <td>120.4</td>
-                        <td>13000</td>
-                        <td>
-                            <button className="btn btn-sm btn-outline-primary button-smybol" type="button"
-                                    data-toggle="collapse"
-                                    data-target="#collapseExample0" aria-expanded="false"
-                                    aria-controls="collapseExample0"
-                                    onClick={() => {
-                                        if (this.state.show0) {
-                                            this.setState({show0: false});
-                                        } else {
-                                            this.setState({show0: true});
-                                        }
-                                    }}>v
-                            </button>
-                        </td>
-                    </tr>
-
-
-
-                    <tr className="table-active">
-                        <th>06/09/2021</th>
-                        <td>Kureci maso, Mouka bila hladka, Veprova kotleta</td>
-                        <td>66 minut</td>
-                        <td>255</td>
-                        <td>380</td>
-                        <td>120.4</td>
-                        <td>13000</td>
-                        <td>
-                            <button className="btn btn-sm btn-outline-primary button-smybol" type="button"
-                                    data-toggle="collapse"
-                                    data-target="#collapseExample0" aria-expanded="false"
-                                    aria-controls="collapseExample0"
-                                    onClick={() => {
-                                        if (this.state.show0) {
-                                            this.setState({show0: false});
-                                        } else {
-                                            this.setState({show0: true});
-                                        }
-                                    }}>v
-                            </button>
-                        </td>
-                    </tr>
-
-
-
-                    <tr className="table-active">
-                        <th>06/09/2021</th>
-                        <td>Kureci maso, Mouka bila hladka, Veprova kotleta</td>
-                        <td>66 minut</td>
-                        <td>255</td>
-                        <td>380</td>
-                        <td>120.4</td>
-                        <td>13000</td>
-                        <td>
-                            <button className="btn btn-sm btn-outline-primary button-smybol" type="button"
-                                    data-toggle="collapse"
-                                    data-target="#collapseExample0" aria-expanded="false"
-                                    aria-controls="collapseExample0"
-                                    onClick={() => {
-                                        if (this.state.show0) {
-                                            this.setState({show0: false});
-                                        } else {
-                                            this.setState({show0: true});
-                                        }
-                                    }}>v
-                            </button>
-                        </td>
-                    </tr>
-
-
-
-
-
-                    <tr className="table-active">
-                        <td>06/09/2021</td>
                         <td>Kureci maso, Mouka bila hladka, Veprova kotleta</td>
                         <td>66 minut</td>
                         <td>255</td>

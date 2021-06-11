@@ -1,21 +1,26 @@
 package kacirekj.myweb.component;
 
-import kacirekj.myweb.domain.Category;
-import kacirekj.myweb.domain.Food;
-import kacirekj.myweb.domain.Person;
+import kacirekj.myweb.domain.*;
+import kacirekj.myweb.repository.FoodEntryRepository;
 import kacirekj.myweb.repository.FoodRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.stream.Stream;
+
+import static kacirekj.myweb.domain.DaytimeEnum.*;
 
 @Component
 public class DataInit implements CommandLineRunner {
 
     private final FoodRepository repository;
+    private final FoodEntryRepository foodEntryRepository;
 
-    public DataInit(FoodRepository repository) {
+    public DataInit(FoodRepository repository, FoodEntryRepository foodEntryRepository) {
         this.repository = repository;
+        this.foodEntryRepository = foodEntryRepository;
     }
 
     @Override
@@ -68,5 +73,25 @@ public class DataInit implements CommandLineRunner {
         repository.save(f1);
         repository.save(f2);
         repository.save(f3);
+
+
+        FoodEntry foodEntry0 = new FoodEntry(null, admin, f0, LocalDate.now(), DOPOLEDNI_SVACINA, 150);
+        FoodEntry foodEntry1 = new FoodEntry(null, admin, f1, LocalDate.now(), OBED, 250);
+        FoodEntry foodEntry2 = new FoodEntry(null, admin, f2, LocalDate.now().minus(3, ChronoUnit.DAYS), SNIDANE, 350);
+        FoodEntry foodEntry3 = new FoodEntry(null, admin, f3, LocalDate.now().minus(3, ChronoUnit.DAYS), DOPOLEDNI_SVACINA, 50);
+        FoodEntry foodEntry4 = new FoodEntry(null, admin, f2, LocalDate.now().minus(4, ChronoUnit.DAYS), NEUVEDENO, 5);
+        FoodEntry foodEntry5 = new FoodEntry(null, admin, f3, LocalDate.now().minus(5, ChronoUnit.DAYS), SNIDANE, 750);
+        FoodEntry foodEntry6 = new FoodEntry(null, admin, f2, LocalDate.now().minus(5, ChronoUnit.DAYS), DOPOLEDNI_SVACINA, 75);
+        FoodEntry foodEntry7 = new FoodEntry(null, admin, f0, LocalDate.now().minus(5, ChronoUnit.DAYS), OBED, 50);
+        FoodEntry foodEntry8 = new FoodEntry(null, admin, f0, LocalDate.now().minus(5, ChronoUnit.DAYS), VECERE, 74);
+        FoodEntry foodEntry9 = new FoodEntry(null, admin, f1, LocalDate.now().minus(5, ChronoUnit.DAYS), NEUVEDENO, 7544);
+
+        foodEntryRepository.save(foodEntry0);
+        foodEntryRepository.save(foodEntry1);
+        foodEntryRepository.save(foodEntry2);
+        foodEntryRepository.save(foodEntry3);
+        foodEntryRepository.save(foodEntry4);
+        foodEntryRepository.save(foodEntry5);
+
     }
 }
