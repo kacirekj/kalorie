@@ -1,6 +1,7 @@
 <template>
   <div class="searchbox">
     <input type="text"
+           class="form-control form-control-sm"
            v-model="text"
            @click="set('isFocusOnInput', true)"
            @blur="delayedSet('isFocusOnInput', false)"

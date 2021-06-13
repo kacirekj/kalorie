@@ -1,9 +1,9 @@
 <template>
   <div class="container" id="app">
-<!--    <div id="nav">-->
-<!--      <router-link to="/">Home</router-link> |-->
-<!--      <router-link to="/about">About</router-link>-->
-<!--    </div>-->
+    <!--    <div id="nav">-->
+    <!--      <router-link to="/">Home</router-link> |-->
+    <!--      <router-link to="/about">About</router-link>-->
+    <!--    </div>-->
 
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
@@ -36,8 +36,7 @@ export default {
   name: 'App',
   components: {},
   data: function () {
-    return {
-    }
+    return {}
   },
   methods: {
     fetch: function () {
@@ -50,13 +49,27 @@ export default {
       this.items.push(this.item)
     }
   },
-  async created() {
+  async beforeCreate() {
     if (!this.$root.my) {
       this.$root.my = 0;
     }
     console.log('root');
     this.$root.$data.foods = await foodConnector.getFoodByIdContaining('');
     this.$root.$data.foodEntries = await foodConnector.getFoodEntries();
+
+    const foodEntries = this.$root.$data.foodEntries;
+
+    this.$root.$data.foodEntriesByDate = foodEntries.reduce((days, foodEntry) => {
+          if(!days[foodEntry.date]) {
+            days[foodEntry.date] = [];
+          }
+          days[foodEntry.date].push(foodEntry);
+          return days;
+        },
+        {}
+    )
+
+
     FoodEntryList.sortByDateDesc(this.$root.$data.foodEntries);
   }
 }

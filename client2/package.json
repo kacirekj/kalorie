@@ -12,6 +12,8 @@
     "core-js": "^3.6.5",
     "v-autocomplete": "^1.8.2",
     "vue": "^2.6.11",
+    "vue-frag": "^1.1.5",
+    "vue-fragment": "^1.5.2",
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
@@ -37,7 +39,8 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "no-unused-vars": 1
+      "no-unused-vars": "off",
+      "no-unused-components": "off"
     }
   },
   "browserslist": [

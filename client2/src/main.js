@@ -4,9 +4,15 @@ import router from './router'
 import Autocomplete from 'v-autocomplete'
 import 'v-autocomplete/dist/v-autocomplete.css'
 import FoodEntry from "@/domain/FoodEntry";
+import {Plugin} from "vue-fragment";
+import frag from 'vue-frag';
+
+Vue.directive('frag', frag);
+
 
 Vue.config.productionTip = false
 Vue.use(Autocomplete)
+Vue.use(Plugin);
 
 Vue.directive('click-outside', {
     bind: function (el, binding, vnode) {
@@ -31,12 +37,13 @@ new Vue({
     data: function () {
         return {
             test: 'root?',
+            my: 0,
             foods: [],
             foodEntries: [],
             newFoodEntry: new FoodEntry({
                 date: new Date().toISOString().slice(0, 10),
                 food: {
-                    name: 'test',
+                    name: '',
                     calories: 0
                 },
                 amount: 100,

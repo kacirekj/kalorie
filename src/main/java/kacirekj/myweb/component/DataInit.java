@@ -84,8 +84,11 @@ public class DataInit implements CommandLineRunner {
         FoodEntry foodEntry6 = new FoodEntry(null, admin, f2, LocalDate.now().minus(5, ChronoUnit.DAYS), DOPOLEDNI_SVACINA, 75);
         FoodEntry foodEntry7 = new FoodEntry(null, admin, f0, LocalDate.now().minus(5, ChronoUnit.DAYS), OBED, 50);
         FoodEntry foodEntry8 = new FoodEntry(null, admin, f0, LocalDate.now().minus(5, ChronoUnit.DAYS), VECERE, 74);
-        FoodEntry foodEntry9 = new FoodEntry(null, admin, f1, LocalDate.now().minus(5, ChronoUnit.DAYS), NEUVEDENO, 7544);
+        for(int i = 0; i < 365*4; i++) {
+            FoodEntry foodEntry9 = new FoodEntry(null, admin, f1, LocalDate.now().minus(i/20, ChronoUnit.DAYS), NEUVEDENO, i);
+            foodEntryRepository.save(foodEntry9);
 
+        }
         foodEntryRepository.save(foodEntry0);
         foodEntryRepository.save(foodEntry1);
         foodEntryRepository.save(foodEntry2);
